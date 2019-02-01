@@ -8,6 +8,7 @@ module.exports = async (req, res, next) => {
   const response = await page.goto(process.env.BASE_URL + req.path)
   if (response.status() != 200) {
     next()
+    return
   }
   const img = await page.screenshot({})
   await page.close()
