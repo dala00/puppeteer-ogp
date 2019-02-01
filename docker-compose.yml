@@ -1,0 +1,13 @@
+version: '2'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    ports:
+      - 3000:3000
+    working_dir: /app
+    tty: true
+    stdin_open: true
+    environment:
+      - PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true
