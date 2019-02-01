@@ -41,6 +41,10 @@ Install npm and yarn and google-chrome.
 
 Dockerfile contains installation sample for google-chrome. (Chrome Driver may not be needed)
 
+```
+PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true yarn
+```
+
 #### Systemd
 
 Service sample.
