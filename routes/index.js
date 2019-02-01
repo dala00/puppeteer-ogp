@@ -14,6 +14,8 @@ module.exports = async (req, res, next) => {
   await page.close()
 
   res.writeHead(200, {
+    'Cache-Control': 'public, max-age=14400',
+    Expires: new Date(Date.now() + 14400000).toUTCString(),
     'Content-Type': 'image/png',
     'Content-Length': img.length
   })
