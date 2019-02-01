@@ -5,8 +5,6 @@ var cookieParser = require('cookie-parser')
 var logger = require('morgan')
 const puppeteer = require('puppeteer')
 
-var indexRouter = require('./routes/index')
-
 require('dotenv').config()
 var app = express()
 
@@ -20,12 +18,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(cookieParser())
 app.use(express.static(path.join(__dirname, 'public')))
 
-app.use('/', indexRouter)
-
-// catch 404 and forward to error handler
-app.use(function(req, res, next) {
-  next(createError(404))
-})
+app.use(require('./routes/index'))
 ;(async () => {
   const options = {
     args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
@@ -40,6 +33,11 @@ app.use(function(req, res, next) {
     browser.close()
   })
 })()
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404))
+})
 
 // error handler
 app.use(function(err, req, res, next) {
