@@ -5,7 +5,8 @@ module.exports = async (req, res, next) => {
     width: Number(process.env.IMAGE_WIDTH),
     height: Number(process.env.IMAGE_HEIGHT)
   })
-  const response = await page.goto(process.env.BASE_URL + req.path)
+  const path = req.path.replace(/\.png$/, '')
+  const response = await page.goto(process.env.BASE_URL + path)
   if (response.status() != 200) {
     next()
     return
