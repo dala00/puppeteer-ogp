@@ -5,6 +5,7 @@ var router = express.Router()
 router.get('/', async (req, res, next) => {
   const browser = req.app.get('browser')
   const page = await browser.newPage()
+  await page.setViewport({ width: 1200, height: 630 })
   await page.goto('https://www.pressmantech.com')
   const img = await page.screenshot({})
   await page.close()
