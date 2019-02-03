@@ -21,7 +21,12 @@ app.use(express.static(path.join(__dirname, 'public')))
 app.use(require('./routes/index'))
 ;(async () => {
   const options = {
-    args: ['--no-sandbox', '--disable-setuid-sandbox', '--disable-gpu'],
+    args: [
+      '--no-sandbox',
+      '--disable-setuid-sandbox',
+      '--disable-gpu',
+      '--disable-dev-shm-usage'
+    ],
     executablePath: '/usr/bin/google-chrome'
   }
   const browser = await puppeteer
