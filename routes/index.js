@@ -1,16 +1,28 @@
+const createError = require('http-errors')
+const { launchBrowser, getPage } = require('../lib/browser')
+
 module.exports = async (req, res, next) => {
   const browser = req.app.get('browser')
-  const page = await browser.newPage()
-  await page.setViewport({
-    width: Number(process.env.IMAGE_WIDTH),
-    height: Number(process.env.IMAGE_HEIGHT)
-  })
   const path = req.path.replace(/\.png$/, '')
-  const response = await page.goto(process.env.BASE_URL + path)
-  if (response.status() != 200) {
+  const url = process.env.BASE_URL + path
+  let page = null
+
+  try {
+    page = await getPage(browser, url)
+  } catch (err) {
+    console.error(err)
+    await browser.close()
+    const newBrowser = await launchBrowser()
+    req.app.set('browser', newBrowser)
+    next(createError(500))
+    return
+  }
+
+  if (!page) {
     next()
     return
   }
+
   const img = await page.screenshot({})
   await page.close()
 

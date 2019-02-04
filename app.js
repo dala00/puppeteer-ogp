@@ -3,7 +3,7 @@ var express = require('express')
 var path = require('path')
 var cookieParser = require('cookie-parser')
 var logger = require('morgan')
-const puppeteer = require('puppeteer')
+const launchBrowser = require('./lib/browser').launchBrowser
 
 require('dotenv').config()
 var app = express()
@@ -20,23 +20,13 @@ app.use(express.static(path.join(__dirname, 'public')))
 
 app.use(require('./routes/index'))
 ;(async () => {
-  const options = {
-    args: [
-      '--no-sandbox',
-      '--disable-setuid-sandbox',
-      '--disable-gpu',
-      '--disable-dev-shm-usage'
-    ],
-    executablePath: '/usr/bin/google-chrome'
+  const browser = await launchBrowser()
+  if (!browser) {
+    console.error('Failed to launch browser')
+    process.exit(1)
+    return
   }
-  const browser = await puppeteer
-    .launch(options)
-    .catch(error => console.error(error))
   app.set('browser', browser)
-  console.log('Browser started.')
-  process.on('exit', function() {
-    browser.close()
-  })
 })()
 
 // catch 404 and forward to error handler
