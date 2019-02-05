@@ -2,8 +2,13 @@ const createError = require('http-errors')
 const { launchBrowser, getPage } = require('../lib/browser')
 
 module.exports = async (req, res, next) => {
-  const browser = req.app.get('browser')
   const path = req.path.replace(/\.png$/, '')
+  if (!isValidPath(path)) {
+    next()
+    return
+  }
+
+  const browser = req.app.get('browser')
   const url = process.env.BASE_URL + path
   let page = null
 
@@ -33,4 +38,15 @@ module.exports = async (req, res, next) => {
     'Content-Length': img.length
   })
   res.end(img)
+}
+
+function isValidPath(path) {
+  if (!process.env.URL_FILTER || process.env.URL_FILTER == '') {
+    return true
+  }
+  const validUrls = process.env.URL_FILTER.split(/,/)
+  return (
+    validUrls.find(validUrl => path.substr(0, validUrl.length) === validUrl) !==
+    undefined
+  )
 }

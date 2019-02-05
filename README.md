@@ -10,6 +10,7 @@ Configure .env
 BASE_URL=https://your.website
 IMAGE_WIDTH=600
 IMAGE_HEIGHT=315
+URL_FILTER=/articles,/posts
 ```
 
 ### Development
